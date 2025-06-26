@@ -26,3 +26,18 @@ CostMyTrip is a community-driven platform where travelers can share their actual
 
 - **Expense Card Creation** - Users can post detailed expense information for their trips
 - **City Browse** - Explore expense cards from major cities around the world
+
+## Project Structure
+
+```
+src/
+├── app/                  # Routing (Next.js App Router)
+│   ├── auth/            # Authentication-related APIs
+│   └── ...              # Page files
+├── components/          # React components
+│   ├── elements/        # Common reusable components
+│   └── layouts/         # Common page layouts (e.g., header, footer)
+├── features/            # Feature-based components
+├── utils/               # General-purpose helper functions (formatting, validation, etc.)
+└── types/               # TypeScript type definition files
+```
