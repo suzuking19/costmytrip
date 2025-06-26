@@ -1,10 +1,26 @@
 # CostMyTrip
 
-A travel expense sharing platform that helps travelers share and discover real cost information for destinations worldwide.
+![CostMyTrip Banner](./public/header.png)
+
+**URL:** [https://www.costmytrip.com](https://www.costmytrip.com)
 
 ## About
 
 CostMyTrip is a community-driven platform where travelers can share their actual travel expenses and browse cost information from other users. This helps future travelers plan their budgets more accurately based on real-world data.
+
+## Design System
+
+### Color Theme
+
+- **Primary (Dark Blue):** `#124261`
+- **Secondary (Teal):** `#227461`
+- **Accent (Orange):** `#E48928`
+- **Background (Beige):** `#F3F1EF`
+
+### Typography
+
+- **Primary Font:** Noto Sans - For general text and UI elements
+- **Monospace Font:** Noto Sans Mono - For prices, dates, and code-like content
 
 ### MVP Features
 
