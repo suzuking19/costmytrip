@@ -13,7 +13,7 @@
   --color-indigo-800: #0a2940;
   --color-indigo-900: #082135;
   --color-indigo-950: #041120;
-  /* Default indigo (for text-indigo, bg-indigo classes) */
+  /* Default indigo (Primary Dark Blue from design system) */
   --color-indigo: #124261;
 
   --color-teal-50: #f0f8f7;
@@ -27,7 +27,7 @@
   --color-teal-800: #175040;
   --color-teal-900: #134435;
   --color-teal-950: #0a221a;
-  /* Default teal */
+  /* Default teal (Secondary Teal from design system) */
   --color-teal: #227461;
 
   --color-orange-50: #fef7f0;
@@ -41,20 +41,20 @@
   --color-orange-800: #9f5f1c;
   --color-orange-900: #885118;
   --color-orange-950: #44280c;
-  /* Default orange */
+  /* Default orange (Accent Orange from design system) */
   --color-orange: #e48928;
 
-  --color-stone-50: #f3f1ef;
-  --color-stone-100: #e7e3df;
-  --color-stone-200: #cfc7bf;
-  --color-stone-300: #b7ab9f;
-  --color-stone-400: #9f8f7f;
-  --color-stone-500: #87735f;
-  --color-stone-600: #796556;
-  --color-stone-700: #6b574d;
-  --color-stone-800: #5d4944;
-  --color-stone-900: #4f3b3b;
-  --color-stone-950: #271d1d;
-  /* Default stone (for bg-stone classes) */
-  --color-stone: #87735f;
+  --color-stone-50: #fefefe;
+  --color-stone-100: #f9f7f5;
+  --color-stone-200: #f3f1ef;
+  --color-stone-300: #e8e5e1;
+  --color-stone-400: #ddd8d2;
+  --color-stone-500: #f3f1ef;
+  --color-stone-600: #c4bfb8;
+  --color-stone-700: #a8a29e;
+  --color-stone-800: #78716c;
+  --color-stone-900: #57534e;
+  --color-stone-950: #2c2825;
+  /* Default stone (Background Beige from design system) */
+  --color-stone: #f3f1ef;
 }
