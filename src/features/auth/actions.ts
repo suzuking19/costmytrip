@@ -35,4 +35,10 @@ const signInWith = (provider: Provider) => async (): Promise<void> => {
 
 const signInWithGoogle = signInWith("google");
 
-export { signInWithGoogle };
+const signOut = async () => {
+  const supabase = await createClient();
+  await supabase.auth.signOut();
+  redirect("/");
+};
+
+export { signInWithGoogle, signOut };

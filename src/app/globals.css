@@ -1,8 +1,60 @@
 @import "tailwindcss";
 
 @theme {
+  /* Custom color palette - Tailwind CSS v4 format */
+  --color-indigo-50: #f0f4f8;
+  --color-indigo-100: #d9e6f0;
+  --color-indigo-200: #b3cde1;
+  --color-indigo-300: #8db4d2;
+  --color-indigo-400: #679bc3;
+  --color-indigo-500: #124261;
+  --color-indigo-600: #0f3a56;
+  --color-indigo-700: #0d324b;
+  --color-indigo-800: #0a2940;
+  --color-indigo-900: #082135;
+  --color-indigo-950: #041120;
+  /* Default indigo (for text-indigo, bg-indigo classes) */
   --color-indigo: #124261;
+
+  --color-teal-50: #f0f8f7;
+  --color-teal-100: #d9f0ed;
+  --color-teal-200: #b3e1db;
+  --color-teal-300: #8dd2c9;
+  --color-teal-400: #67c3b7;
+  --color-teal-500: #227461;
+  --color-teal-600: #1f6856;
+  --color-teal-700: #1b5c4b;
+  --color-teal-800: #175040;
+  --color-teal-900: #134435;
+  --color-teal-950: #0a221a;
+  /* Default teal */
   --color-teal: #227461;
+
+  --color-orange-50: #fef7f0;
+  --color-orange-100: #fcead9;
+  --color-orange-200: #f9d5b3;
+  --color-orange-300: #f6c08d;
+  --color-orange-400: #f3ab67;
+  --color-orange-500: #e48928;
+  --color-orange-600: #cd7b24;
+  --color-orange-700: #b66d20;
+  --color-orange-800: #9f5f1c;
+  --color-orange-900: #885118;
+  --color-orange-950: #44280c;
+  /* Default orange */
   --color-orange: #e48928;
-  --color-stone: #f3f1ef;
+
+  --color-stone-50: #f3f1ef;
+  --color-stone-100: #e7e3df;
+  --color-stone-200: #cfc7bf;
+  --color-stone-300: #b7ab9f;
+  --color-stone-400: #9f8f7f;
+  --color-stone-500: #87735f;
+  --color-stone-600: #796556;
+  --color-stone-700: #6b574d;
+  --color-stone-800: #5d4944;
+  --color-stone-900: #4f3b3b;
+  --color-stone-950: #271d1d;
+  /* Default stone (for bg-stone classes) */
+  --color-stone: #87735f;
 }
