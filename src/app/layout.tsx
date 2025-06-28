@@ -30,7 +30,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${notoSans.variable} ${notoSansMono.variable} antialiased`}
+        className={`${notoSans.variable} ${notoSansMono.variable} antialiased bg-stone`}
       >
         {!isSigninPage && <Header />}
         <main>{children}</main>
