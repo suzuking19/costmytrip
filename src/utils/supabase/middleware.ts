@@ -42,7 +42,8 @@ export async function updateSession(request: NextRequest) {
   if (
     !user &&
     !request.nextUrl.pathname.startsWith("/signin") &&
-    !request.nextUrl.pathname.startsWith("/auth")
+    !request.nextUrl.pathname.startsWith("/auth") &&
+    request.nextUrl.pathname !== "/"
   ) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
@@ -63,5 +64,21 @@ export async function updateSession(request: NextRequest) {
   // If this is not done, you may be causing the browser and server to go out
   // of sync and terminate the user's session prematurely!
 
-  return supabaseResponse;
+  // Add custom header to store current request URL
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-url", request.url);
+
+  // Create new response while preserving Supabase cookies
+  const responseWithHeaders = NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
+
+  // Copy Supabase cookies individually
+  supabaseResponse.cookies.getAll().forEach((cookie) => {
+    responseWithHeaders.cookies.set(cookie.name, cookie.value, cookie);
+  });
+
+  return responseWithHeaders;
 }
