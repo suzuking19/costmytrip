@@ -58,11 +58,11 @@ export default function UserDropdown({ user }: UserDropdownProps) {
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-white border border-stone-200 rounded-lg shadow-lg z-50">
+        <div className="absolute right-0 mt-2 w-48 bg-white border border-stone-300 rounded-lg shadow-lg z-50">
           <div className="py-1">
             <Link
               href="/mypage"
-              className="flex items-center justify-between px-4 py-2 text-stone-700 hover:bg-stone-200 transition-colors duration-200"
+              className="flex items-center justify-between px-4 py-2 text-gray-900 hover:bg-gray-200 transition-colors duration-200"
               onClick={() => setIsOpen(false)}
             >
               <div className="flex items-center">
