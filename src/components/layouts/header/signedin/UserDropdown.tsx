@@ -15,7 +15,7 @@ export default function UserDropdown({ user }: UserDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // 外部クリックでドロップダウンを閉じる
+  // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -61,12 +61,14 @@ export default function UserDropdown({ user }: UserDropdownProps) {
         <div className="absolute right-0 mt-2 w-48 bg-white border border-stone-200 rounded-lg shadow-lg z-50">
           <div className="py-1">
             <Link
-              href="/profile"
-              className="flex items-center px-4 py-2 text-stone-700 hover:bg-stone-50 transition-colors duration-200"
+              href="/mypage"
+              className="flex items-center justify-between px-4 py-2 text-stone-700 hover:bg-stone-200 transition-colors duration-200"
               onClick={() => setIsOpen(false)}
             >
-              <User className="h-4 w-4 mr-3" />
-              Profile
+              <div className="flex items-center">
+                <User className="h-4 w-4 mr-3" />
+                My Page
+              </div>
             </Link>
             <form action={signOut} className="w-full">
               <button

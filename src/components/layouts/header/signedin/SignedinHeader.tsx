@@ -30,11 +30,11 @@ export default async function SignedinHeader() {
           <div className="flex items-center space-x-4">
             {/* Post button */}
             <Link
-              href="/post"
+              href="/create"
               className="flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition-colors duration-200"
             >
               <Plus className="h-4 w-4" />
-              <span className="font-medium">Post</span>
+              <span className="font-medium">Create</span>
             </Link>
 
             {/* Notification bell */}
