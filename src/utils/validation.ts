@@ -1,147 +1,174 @@
-/**
- * URL validation utilities
- */
+import { z } from "zod";
 
 /**
- * Validate Instagram URL format
+ * Zod validation schemas
  */
-export function validateInstagramUrl(url: string): {
-  isValid: boolean;
-  error?: string;
-} {
-  if (!url) {
-    return { isValid: true }; // Empty URL is valid (optional field)
-  }
 
-  try {
-    const urlObj = new URL(url);
-
-    // Check if it's an Instagram URL
-    if (!["instagram.com", "www.instagram.com"].includes(urlObj.hostname)) {
-      return {
-        isValid: false,
-        error:
-          "Please enter a valid Instagram URL in the format https://instagram.com/username or https://www.instagram.com/username",
-      };
-    }
-
-    // Check if pathname starts with /
-    if (!urlObj.pathname.startsWith("/")) {
-      return {
-        isValid: false,
-        error: "Please include a username in your Instagram URL",
-      };
-    }
-
-    // Basic username validation (should start with / and contain at least one character)
-    const username = urlObj.pathname.slice(1); // Remove leading /
-    if (!username || username.includes("/")) {
-      return {
-        isValid: false,
-        error: "Please include a username in your Instagram URL",
-      };
-    }
-
-    return { isValid: true };
-  } catch {
-    return {
-      isValid: false,
-      error: "Please enter a valid Instagram URL",
-    };
-  }
-}
-
-/**
- * Validate X (Twitter) URL format
- */
-export function validateXUrl(url: string): {
-  isValid: boolean;
-  error?: string;
-} {
-  if (!url) {
-    return { isValid: true }; // Empty URL is valid (optional field)
-  }
-
-  try {
-    const urlObj = new URL(url);
-
-    // Check if it's an X/Twitter URL
-    if (
-      !["x.com", "www.x.com", "twitter.com", "www.twitter.com"].includes(
-        urlObj.hostname
+// Username validation schema
+const usernameSchema = z
+  .string()
+  .min(1, "Username is required")
+  .transform((username) => {
+    if (!username) return username;
+    // Remove @ if user included it
+    return username.startsWith("@") ? username.slice(1) : username;
+  })
+  .pipe(
+    z
+      .string()
+      .min(3, "Username must be at least 3 characters")
+      .max(20, "Username must be 20 characters or less")
+      .regex(
+        /^[a-zA-Z0-9_]+$/,
+        "Username can only contain letters, numbers, and underscores"
       )
-    ) {
-      return {
-        isValid: false,
-        error:
-          "Please enter a valid X URL in the format https://x.com/username or https://twitter.com/username",
-      };
-    }
+  );
 
-    // Check if pathname starts with /
-    if (!urlObj.pathname.startsWith("/")) {
-      return {
-        isValid: false,
-        error: "Please include a username in your X URL",
-      };
-    }
+// Instagram URL validation schema
+const instagramUrlSchema = z
+  .string()
+  .optional()
+  .transform((url) => {
+    // If url is undefined or empty string, return undefined
+    if (!url || url.trim() === "") return undefined;
+    return url.trim();
+  })
+  .refine(
+    (url) => {
+      if (!url) return true; // Empty URL is valid (optional field)
 
-    // Basic username validation (should start with / and contain at least one character)
-    const username = urlObj.pathname.slice(1); // Remove leading /
-    if (!username || username.includes("/")) {
-      return {
-        isValid: false,
-        error: "Please include a username in your X URL",
-      };
+      try {
+        const urlObj = new URL(url);
+        return ["instagram.com", "www.instagram.com"].includes(urlObj.hostname);
+      } catch {
+        return false;
+      }
+    },
+    {
+      message:
+        "Please enter a valid Instagram URL in the format https://instagram.com/username or https://www.instagram.com/username",
     }
+  )
+  .refine(
+    (url) => {
+      if (!url) return true;
 
-    return { isValid: true };
-  } catch {
-    return {
-      isValid: false,
-      error: "Please enter a valid X URL",
-    };
-  }
-}
+      try {
+        const urlObj = new URL(url);
+        const username = urlObj.pathname.slice(1); // Remove leading /
+        return username && !username.includes("/");
+      } catch {
+        return false;
+      }
+    },
+    {
+      message: "Please include a username in your Instagram URL",
+    }
+  );
+
+// X URL validation schema
+const xUrlSchema = z
+  .string()
+  .optional()
+  .transform((url) => {
+    // If url is undefined or empty string, return undefined
+    if (!url || url.trim() === "") return undefined;
+    return url.trim();
+  })
+  .refine(
+    (url) => {
+      if (!url) return true; // Empty URL is valid (optional field)
+
+      try {
+        const urlObj = new URL(url);
+        return [
+          "x.com",
+          "www.x.com",
+          "twitter.com",
+          "www.twitter.com",
+        ].includes(urlObj.hostname);
+      } catch {
+        return false;
+      }
+    },
+    {
+      message:
+        "Please enter a valid X URL in the format https://x.com/username or https://twitter.com/username",
+    }
+  )
+  .refine(
+    (url) => {
+      if (!url) return true;
+
+      try {
+        const urlObj = new URL(url);
+        const username = urlObj.pathname.slice(1); // Remove leading /
+        return username && !username.includes("/");
+      } catch {
+        return false;
+      }
+    },
+    {
+      message: "Please include a username in your X URL",
+    }
+  );
+
+// Profile update schema
+export const profileUpdateSchema = z.object({
+  username: usernameSchema,
+  description: z.string().optional(),
+  current_city_id: z.string().optional(),
+  instagram_url: instagramUrlSchema,
+  x_url: xUrlSchema,
+  spoken_languages: z.array(z.string()).optional(),
+});
+
+export type ProfileUpdateData = z.infer<typeof profileUpdateSchema>;
 
 /**
- * Validate username format (must start with @)
+ * Legacy validation functions (for backward compatibility)
  */
 export function validateUsername(username: string): {
   isValid: boolean;
   error?: string;
 } {
-  if (!username) {
-    return { isValid: false, error: "Username is required" };
+  try {
+    usernameSchema.parse(username);
+    return { isValid: true };
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return { isValid: false, error: error.errors[0]?.message };
+    }
+    return { isValid: false, error: "Invalid username format" };
   }
+}
 
-  if (!username.startsWith("@")) {
-    return { isValid: false, error: "Username must start with @" };
+export function validateInstagramUrl(url: string): {
+  isValid: boolean;
+  error?: string;
+} {
+  try {
+    instagramUrlSchema.parse(url);
+    return { isValid: true };
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return { isValid: false, error: error.errors[0]?.message };
+    }
+    return { isValid: false, error: "Invalid Instagram URL format" };
   }
+}
 
-  const usernameWithoutAt = username.slice(1);
-
-  if (usernameWithoutAt.length < 3) {
-    return {
-      isValid: false,
-      error: "Username must be at least 3 characters after @",
-    };
+export function validateXUrl(url: string): {
+  isValid: boolean;
+  error?: string;
+} {
+  try {
+    xUrlSchema.parse(url);
+    return { isValid: true };
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return { isValid: false, error: error.errors[0]?.message };
+    }
+    return { isValid: false, error: "Invalid X URL format" };
   }
-
-  if (usernameWithoutAt.length > 20) {
-    return {
-      isValid: false,
-      error: "Username must be 20 characters or less after @",
-    };
-  }
-
-  // Only allow alphanumeric characters and underscores
-  if (!/^[a-zA-Z0-9_]+$/.test(usernameWithoutAt)) {
-    return {
-      isValid: false,
-      error: "Username can only contain letters, numbers, and underscores",
-    };
-  }
-
-  return { isValid: true };
 }

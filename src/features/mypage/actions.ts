@@ -2,11 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/utils/supabase/server";
-import {
-  validateInstagramUrl,
-  validateXUrl,
-  validateUsername,
-} from "@/utils/validation";
+import { profileUpdateSchema } from "@/utils/validation";
 import {
   updateUserProfile,
   toggleBookmark,
@@ -23,12 +19,19 @@ export async function updateProfileAction(
   formData: FormData
 ): Promise<{ success: boolean; data?: UserProfile; error?: string }> {
   try {
+    // Extract form data with proper null/undefined handling
     const username = formData.get("username") as string;
     const description = formData.get("description") as string;
     const currentCityId = formData.get("current_city_id") as string;
     const instagramUrl = formData.get("instagram_url") as string;
     const xUrl = formData.get("x_url") as string;
     const spokenLanguagesInput = formData.get("spoken_languages") as string;
+
+    // Helper function to normalize empty strings to undefined
+    const normalizeEmptyString = (value: string | null): string | undefined => {
+      return value && value.trim() !== "" ? value.trim() : undefined;
+    };
+
     const spokenLanguages = spokenLanguagesInput
       ? spokenLanguagesInput
           .split(",")
@@ -36,40 +39,39 @@ export async function updateProfileAction(
           .filter((lang) => lang.length > 0)
       : [];
 
-    // Validate username
-    const usernameValidation = validateUsername(username);
-    if (!usernameValidation.isValid) {
+    // Prepare data for validation with proper normalization
+    const formDataToValidate = {
+      username: normalizeEmptyString(username),
+      description: normalizeEmptyString(description),
+      current_city_id: normalizeEmptyString(currentCityId),
+      instagram_url: normalizeEmptyString(instagramUrl),
+      x_url: normalizeEmptyString(xUrl),
+      spoken_languages:
+        spokenLanguages.length > 0 ? spokenLanguages : undefined,
+    };
+
+    console.log("Form data to validate:", formDataToValidate);
+
+    // Validate all data using Zod schema
+    const validationResult = profileUpdateSchema.safeParse(formDataToValidate);
+
+    if (!validationResult.success) {
+      const firstError = validationResult.error.errors[0];
       return {
         success: false,
-        error: usernameValidation.error || "Invalid username format",
+        error: firstError?.message || "Validation failed",
       };
     }
 
-    // Validate Instagram URL
-    const instagramValidation = validateInstagramUrl(instagramUrl);
-    if (!instagramValidation.isValid) {
-      return {
-        success: false,
-        error: instagramValidation.error || "Invalid Instagram URL format",
-      };
-    }
-
-    // Validate X URL
-    const xValidation = validateXUrl(xUrl);
-    if (!xValidation.isValid) {
-      return {
-        success: false,
-        error: xValidation.error || "Invalid X URL format",
-      };
-    }
+    const validatedData = validationResult.data;
 
     const updates = {
-      username: username || undefined,
-      description: description || null,
-      current_city_id: currentCityId || null,
-      instagram_url: instagramUrl || null,
-      x_url: xUrl || null,
-      spoken_languages: spokenLanguages.length > 0 ? spokenLanguages : null,
+      username: validatedData.username || undefined,
+      description: validatedData.description || null,
+      current_city_id: validatedData.current_city_id || null,
+      instagram_url: validatedData.instagram_url || null,
+      x_url: validatedData.x_url || null,
+      spoken_languages: validatedData.spoken_languages || null,
     };
 
     const updatedProfile = await updateUserProfile(userId, updates);

@@ -1,7 +1,6 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Instagram, Twitter, Youtube } from "lucide-react";
 import { type UserProfile as UserProfileType } from "@/features/mypage/queries";
 
 interface PinnedCity {
@@ -95,17 +94,18 @@ export function MypageProfile({
               {/* SNS */}
               <div>
                 <span className="text-gray-600 font-medium">SNS : </span>
-                <div className="inline-flex items-center space-x-3 ml-2">
+                <div className="inline-flex items-center space-x-4 ml-2">
                   {profile.instagram_url ? (
                     <Link
                       href={profile.instagram_url}
                       target="_blank"
                       rel="noopener noreferrer"
+                      className="text-pink-500 hover:text-pink-600 transition-colors font-medium"
                     >
-                      <Instagram className="w-5 h-5 text-pink-500 hover:text-pink-600 transition-colors" />
+                      Instagram
                     </Link>
                   ) : (
-                    <Instagram className="w-5 h-5 text-gray-300" />
+                    <span className="text-gray-300 font-medium">Instagram</span>
                   )}
 
                   {profile.x_url ? (
@@ -113,14 +113,15 @@ export function MypageProfile({
                       href={profile.x_url}
                       target="_blank"
                       rel="noopener noreferrer"
+                      className="text-blue-500 hover:text-blue-600 transition-colors font-medium"
                     >
-                      <Twitter className="w-5 h-5 text-blue-500 hover:text-blue-600 transition-colors" />
+                      X (Twitter)
                     </Link>
                   ) : (
-                    <Twitter className="w-5 h-5 text-gray-300" />
+                    <span className="text-gray-300 font-medium">
+                      X (Twitter)
+                    </span>
                   )}
-
-                  <Youtube className="w-5 h-5 text-gray-300" />
                 </div>
               </div>
             </div>
@@ -153,6 +154,9 @@ export function MypageProfile({
             <h3 className="text-xl font-bold text-gray-900 mb-4 underline">
               Book Mark list
             </h3>
+            <p className="text-gray-500 text-sm mb-3">
+              *This list is private and will not be visible to other users
+            </p>
             <Link
               href="/mypage/bookmarks"
               className="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
