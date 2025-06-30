@@ -7,9 +7,7 @@ interface PinnedCity {
   city: {
     id: string;
     name: string;
-    country: {
-      name: string;
-    };
+    country: string;
   };
 }
 
@@ -75,7 +73,7 @@ export function MypageProfile({
                 </span>
                 <span className="text-gray-900">
                   {profile.current_city
-                    ? `${profile.current_city.name}, ${profile.current_city.country.name}`
+                    ? `${profile.current_city.name}, ${profile.current_city.country}`
                     : "Not specified"}
                 </span>
               </div>
@@ -140,7 +138,7 @@ export function MypageProfile({
                     key={pinnedCity.city.id}
                     className="inline-block bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full border border-green-200"
                   >
-                    {pinnedCity.city.name}, {pinnedCity.city.country.name}
+                    {pinnedCity.city.name}, {pinnedCity.city.country}
                   </span>
                 ))}
               </div>

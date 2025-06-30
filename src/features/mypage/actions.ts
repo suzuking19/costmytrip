@@ -2,12 +2,13 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/utils/supabase/server";
-import { profileUpdateSchema } from "@/utils/validation";
+import { profileUpdateSchema, validateUsername } from "@/utils/validation";
 import {
   updateUserProfile,
   toggleBookmark,
   togglePinnedCity,
   createUserProfile,
+  isUsernameTaken,
   type UserProfile,
 } from "./queries";
 
@@ -165,6 +166,24 @@ export async function createProfileAction(
   username: string
 ): Promise<{ success: boolean; data?: UserProfile; error?: string }> {
   try {
+    // Validate username format
+    const validation = validateUsername(username);
+    if (!validation.isValid) {
+      return {
+        success: false,
+        error: validation.error || "Invalid username format",
+      };
+    }
+
+    // Check if username is already taken
+    const isTaken = await isUsernameTaken(username);
+    if (isTaken) {
+      return {
+        success: false,
+        error: "This username is already taken. Please choose a different one.",
+      };
+    }
+
     const profile = await createUserProfile(userId, username);
 
     if (!profile) {

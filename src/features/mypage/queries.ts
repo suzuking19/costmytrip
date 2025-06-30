@@ -12,9 +12,7 @@ export interface UserProfile {
   updated_at: string;
   current_city?: {
     name: string;
-    country: {
-      name: string;
-    };
+    country: string;
   };
 }
 
@@ -29,9 +27,7 @@ export interface ExpenseCard {
   updated_at: string;
   city?: {
     name: string;
-    country: {
-      name: string;
-    };
+    country: string;
   };
   status: {
     name: string;
@@ -53,9 +49,7 @@ export interface PinnedCity {
   city: {
     id: string;
     name: string;
-    country: {
-      name: string;
-    };
+    country: string;
   };
 }
 
@@ -74,7 +68,7 @@ export async function getUserProfile(
       *,
       current_city:cities!current_city_id(
         name,
-        country:countries(name)
+        country
       )
     `
     )
@@ -126,7 +120,7 @@ export async function updateUserProfile(
       *,
       current_city:cities!current_city_id(
         name,
-        country:countries(name)
+        country
       )
     `
     )
@@ -162,7 +156,7 @@ export async function createUserProfile(
       *,
       current_city:cities!current_city_id(
         name,
-        country:countries(name)
+        country
       )
     `
     )
@@ -199,18 +193,22 @@ export async function getUserExpenseCards(
       *,
       city:cities!city_id(
         name,
-        country:countries(name)
+        country
       ),
-      status:expense_card_statuses(name),
-      travel_type:travel_types(name),
-      position:positions(name)
+      status:expense_card_statuses!status_id(name),
+      travel_type:travel_types!travel_type_id(name),
+      position:positions!position_id(name)
     `
     )
     .eq("user_id", userId)
     .order("created_at", { ascending: false });
 
   if (error) {
-    console.error("Error fetching expense cards:", error);
+    console.error("Error fetching expense cards:", {
+      userId,
+      errorCode: error.code,
+      errorMessage: error.message,
+    });
     return [];
   }
 
@@ -230,15 +228,15 @@ export async function getUserBookmarks(
     .select(
       `
       created_at,
-      expense_card:expense_cards(
+      expense_card:expense_cards!expense_card_id(
         *,
         city:cities!city_id(
           name,
-          country:countries(name)
+          country
         ),
-        status:expense_card_statuses(name),
-        travel_type:travel_types(name),
-        position:positions(name)
+        status:expense_card_statuses!status_id(name),
+        travel_type:travel_types!travel_type_id(name),
+        position:positions!position_id(name)
       )
     `
     )
@@ -246,7 +244,11 @@ export async function getUserBookmarks(
     .order("created_at", { ascending: false });
 
   if (error) {
-    console.error("Error fetching bookmarks:", error);
+    console.error("Error fetching bookmarks:", {
+      userId,
+      errorCode: error.code,
+      errorMessage: error.message,
+    });
     return [];
   }
 
@@ -268,14 +270,20 @@ export async function getUserPinnedCities(
       city:cities!city_id(
         id,
         name,
-        country:countries(name)
+        country
       )
     `
     )
     .eq("user_id", userId);
 
   if (error) {
-    console.error("Error fetching pinned cities:", error);
+    console.error("Error fetching pinned cities:", {
+      userId,
+      errorCode: error.code,
+      errorMessage: error.message,
+      errorDetails: error.details,
+      errorHint: error.hint,
+    });
     return [];
   }
 
@@ -377,4 +385,34 @@ export async function togglePinnedCity(
     }
     return true;
   }
+}
+
+/**
+ * Check if username is already taken
+ */
+export async function isUsernameTaken(username: string): Promise<boolean> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("user_profiles")
+    .select("username")
+    .eq("username", username)
+    .single();
+
+  if (error) {
+    // If no record found, username is available
+    if (error.code === "PGRST116") {
+      return false;
+    }
+    // For other errors, log and assume taken to be safe
+    console.error("Error checking username availability:", {
+      error,
+      username,
+      code: error.code,
+      message: error.message,
+    });
+    return true;
+  }
+
+  return !!data;
 }

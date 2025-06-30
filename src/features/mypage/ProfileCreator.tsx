@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { createProfileAction } from "@/features/mypage/actions";
+import { validateUsername } from "@/utils/validation";
 
 interface ProfileCreatorProps {
   userId: string;
@@ -11,12 +12,36 @@ export function ProfileCreator({ userId }: ProfileCreatorProps) {
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [validationError, setValidationError] = useState<string | null>(null);
+
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setUsername(value);
+
+    // Clear errors when user starts typing
+    setError(null);
+
+    // Validate in real-time
+    if (value.trim()) {
+      const validation = validateUsername(value.trim());
+      setValidationError(validation.isValid ? null : validation.error || null);
+    } else {
+      setValidationError(null);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!username.trim()) {
       setError("Username is required");
+      return;
+    }
+
+    // Validate username format
+    const validation = validateUsername(username.trim());
+    if (!validation.isValid) {
+      setError(validation.error || "Invalid username format");
       return;
     }
 
@@ -64,18 +89,21 @@ export function ProfileCreator({ userId }: ProfileCreatorProps) {
               type="text"
               id="username"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={handleUsernameChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               placeholder="Enter your username"
               disabled={isLoading}
             />
+            {validationError && (
+              <p className="text-red-600 text-sm mt-1">{validationError}</p>
+            )}
           </div>
 
           {error && <div className="text-red-600 text-sm">{error}</div>}
 
           <button
             type="submit"
-            disabled={isLoading || !username.trim()}
+            disabled={isLoading || !username.trim() || !!validationError}
             className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {isLoading ? "Creating Profile..." : "Create Profile"}

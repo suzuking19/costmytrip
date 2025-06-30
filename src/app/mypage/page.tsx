@@ -34,16 +34,19 @@ async function getMypageData(userId: string): Promise<MypageData | null> {
       data: { user },
     } = await supabase.auth.getUser();
 
-    const [profile, expenseCards, pinnedCities] = await Promise.all([
-      getUserProfile(userId),
-      getUserExpenseCards(userId),
-      getUserPinnedCities(userId),
-    ]);
+    // Get user profile first to check if it exists
+    const profile = await getUserProfile(userId);
 
     if (!profile) {
       // Profile not found - this is expected for new users
       return null;
     }
+
+    // Only fetch additional data if profile exists
+    const [expenseCards, pinnedCities] = await Promise.all([
+      getUserExpenseCards(userId),
+      getUserPinnedCities(userId),
+    ]);
 
     return {
       profile,
