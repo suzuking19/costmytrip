@@ -7,13 +7,7 @@ create table "public"."categories" (
 create table "public"."cities" (
     "id" uuid not null default uuid_generate_v4(),
     "name" text not null,
-    "country_id" uuid
-);
-
-
-create table "public"."countries" (
-    "id" uuid not null default uuid_generate_v4(),
-    "name" text not null
+    "country" text
 );
 
 
@@ -115,10 +109,6 @@ CREATE UNIQUE INDEX categories_pkey ON public.categories USING btree (id);
 
 CREATE UNIQUE INDEX cities_pkey ON public.cities USING btree (id);
 
-CREATE UNIQUE INDEX countries_name_key ON public.countries USING btree (name);
-
-CREATE UNIQUE INDEX countries_pkey ON public.countries USING btree (id);
-
 CREATE UNIQUE INDEX daily_records_expense_card_id_date_key ON public.daily_records USING btree (expense_card_id, date);
 
 CREATE UNIQUE INDEX daily_records_pkey ON public.daily_records USING btree (id);
@@ -157,8 +147,6 @@ alter table "public"."categories" add constraint "categories_pkey" PRIMARY KEY u
 
 alter table "public"."cities" add constraint "cities_pkey" PRIMARY KEY using index "cities_pkey";
 
-alter table "public"."countries" add constraint "countries_pkey" PRIMARY KEY using index "countries_pkey";
-
 alter table "public"."daily_records" add constraint "daily_records_pkey" PRIMARY KEY using index "daily_records_pkey";
 
 alter table "public"."expense_card_statuses" add constraint "expense_card_statuses_pkey" PRIMARY KEY using index "expense_card_statuses_pkey";
@@ -182,12 +170,6 @@ alter table "public"."user_pinned_cities" add constraint "user_pinned_cities_pke
 alter table "public"."user_profiles" add constraint "user_profiles_pkey" PRIMARY KEY using index "user_profiles_pkey";
 
 alter table "public"."categories" add constraint "categories_name_key" UNIQUE using index "categories_name_key";
-
-alter table "public"."cities" add constraint "cities_country_id_fkey" FOREIGN KEY (country_id) REFERENCES countries(id) ON DELETE RESTRICT not valid;
-
-alter table "public"."cities" validate constraint "cities_country_id_fkey";
-
-alter table "public"."countries" add constraint "countries_name_key" UNIQUE using index "countries_name_key";
 
 alter table "public"."daily_records" add constraint "daily_records_expense_card_id_date_key" UNIQUE using index "daily_records_expense_card_id_date_key";
 
@@ -246,14 +228,6 @@ alter table "public"."user_bookmarked_expense_cards" validate constraint "user_b
 alter table "public"."user_bookmarked_expense_cards" add constraint "user_bookmarked_expense_cards_user_id_fkey" FOREIGN KEY (user_id) REFERENCES user_profiles(id) ON DELETE CASCADE not valid;
 
 alter table "public"."user_bookmarked_expense_cards" validate constraint "user_bookmarked_expense_cards_user_id_fkey";
-
-alter table "public"."user_pinned_cities" add constraint "user_pinned_cities_city_id_fkey" FOREIGN KEY (city_id) REFERENCES cities(id) ON DELETE CASCADE not valid;
-
-alter table "public"."user_pinned_cities" validate constraint "user_pinned_cities_city_id_fkey";
-
-alter table "public"."user_pinned_cities" add constraint "user_pinned_cities_user_id_fkey" FOREIGN KEY (user_id) REFERENCES user_profiles(id) ON DELETE CASCADE not valid;
-
-alter table "public"."user_pinned_cities" validate constraint "user_pinned_cities_user_id_fkey";
 
 alter table "public"."user_profiles" add constraint "user_profiles_current_city_id_fkey" FOREIGN KEY (current_city_id) REFERENCES cities(id) not valid;
 
@@ -363,48 +337,6 @@ grant trigger on table "public"."cities" to "service_role";
 grant truncate on table "public"."cities" to "service_role";
 
 grant update on table "public"."cities" to "service_role";
-
-grant delete on table "public"."countries" to "anon";
-
-grant insert on table "public"."countries" to "anon";
-
-grant references on table "public"."countries" to "anon";
-
-grant select on table "public"."countries" to "anon";
-
-grant trigger on table "public"."countries" to "anon";
-
-grant truncate on table "public"."countries" to "anon";
-
-grant update on table "public"."countries" to "anon";
-
-grant delete on table "public"."countries" to "authenticated";
-
-grant insert on table "public"."countries" to "authenticated";
-
-grant references on table "public"."countries" to "authenticated";
-
-grant select on table "public"."countries" to "authenticated";
-
-grant trigger on table "public"."countries" to "authenticated";
-
-grant truncate on table "public"."countries" to "authenticated";
-
-grant update on table "public"."countries" to "authenticated";
-
-grant delete on table "public"."countries" to "service_role";
-
-grant insert on table "public"."countries" to "service_role";
-
-grant references on table "public"."countries" to "service_role";
-
-grant select on table "public"."countries" to "service_role";
-
-grant trigger on table "public"."countries" to "service_role";
-
-grant truncate on table "public"."countries" to "service_role";
-
-grant update on table "public"."countries" to "service_role";
 
 grant delete on table "public"."daily_records" to "anon";
 

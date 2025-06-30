@@ -8,6 +8,14 @@ ALTER TABLE "public"."user_pinned_cities" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "public"."daily_records" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "public"."expense_items" ENABLE ROW LEVEL SECURITY;
 
+-- Enable RLS for reference data tables
+ALTER TABLE "public"."cities" ENABLE ROW LEVEL SECURITY;
+
+-- Cities policies
+-- All users can read cities data (reference data)
+CREATE POLICY "Anyone can view cities" ON "public"."cities"
+    FOR SELECT USING (true);
+
 -- User profile policies
 -- Users can read all profiles, but only update their own
 CREATE POLICY "Users can view all profiles" ON "public"."user_profiles"
