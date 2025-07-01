@@ -39,6 +39,30 @@ This project is developed in **English** to encourage feedback and contributions
 - **Authentication** - Secure user authentication with Supabase Auth
 - **Row Level Security** - Database-level security ensuring users can only access their own data
 
+## Database Schema
+
+### Entity Relationships
+
+The database follows a hierarchical dependency structure:
+
+```
+expense_card > daily_record > expense_item
+```
+
+- **expense_card**: Top-level entity representing a complete trip with expenses
+- **daily_record**: Represents expenses for a specific day within a trip
+- **expense_item**: Individual expense entries within a daily record
+
+### Key Tables
+
+- `expense_cards` - Main trip/expense card data
+- `daily_records` - Daily breakdown of expenses for each card
+- `expense_items` - Individual expense entries
+- `expense_card_tags` - Tags associated with expense cards
+- `expense_card_statuses` - Status values (public, editing)
+- `user_profiles` - User account information
+- `cities` - Reference data for cities/locations
+
 ## Project Structure
 
 ```

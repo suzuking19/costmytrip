@@ -42,12 +42,6 @@ create table "public"."expense_cards" (
 );
 
 
-create table "public"."expense_item_tags" (
-    "expense_item_id" uuid not null,
-    "tag_id" uuid not null
-);
-
-
 create table "public"."expense_items" (
     "id" uuid not null default uuid_generate_v4(),
     "daily_record_id" uuid not null,
@@ -61,12 +55,6 @@ create table "public"."expense_items" (
 
 
 create table "public"."positions" (
-    "id" uuid not null default uuid_generate_v4(),
-    "name" text not null
-);
-
-
-create table "public"."tags" (
     "id" uuid not null default uuid_generate_v4(),
     "name" text not null
 );
@@ -119,17 +107,11 @@ CREATE UNIQUE INDEX expense_card_statuses_pkey ON public.expense_card_statuses U
 
 CREATE UNIQUE INDEX expense_cards_pkey ON public.expense_cards USING btree (id);
 
-CREATE UNIQUE INDEX expense_item_tags_pkey ON public.expense_item_tags USING btree (expense_item_id, tag_id);
-
 CREATE UNIQUE INDEX expense_items_pkey ON public.expense_items USING btree (id);
 
 CREATE UNIQUE INDEX positions_name_key ON public.positions USING btree (name);
 
 CREATE UNIQUE INDEX positions_pkey ON public.positions USING btree (id);
-
-CREATE UNIQUE INDEX tags_name_key ON public.tags USING btree (name);
-
-CREATE UNIQUE INDEX tags_pkey ON public.tags USING btree (id);
 
 CREATE UNIQUE INDEX travel_types_name_key ON public.travel_types USING btree (name);
 
@@ -153,13 +135,9 @@ alter table "public"."expense_card_statuses" add constraint "expense_card_status
 
 alter table "public"."expense_cards" add constraint "expense_cards_pkey" PRIMARY KEY using index "expense_cards_pkey";
 
-alter table "public"."expense_item_tags" add constraint "expense_item_tags_pkey" PRIMARY KEY using index "expense_item_tags_pkey";
-
 alter table "public"."expense_items" add constraint "expense_items_pkey" PRIMARY KEY using index "expense_items_pkey";
 
 alter table "public"."positions" add constraint "positions_pkey" PRIMARY KEY using index "positions_pkey";
-
-alter table "public"."tags" add constraint "tags_pkey" PRIMARY KEY using index "tags_pkey";
 
 alter table "public"."travel_types" add constraint "travel_types_pkey" PRIMARY KEY using index "travel_types_pkey";
 
@@ -199,14 +177,6 @@ alter table "public"."expense_cards" add constraint "expense_cards_user_id_fkey"
 
 alter table "public"."expense_cards" validate constraint "expense_cards_user_id_fkey";
 
-alter table "public"."expense_item_tags" add constraint "expense_item_tags_expense_item_id_fkey" FOREIGN KEY (expense_item_id) REFERENCES expense_items(id) ON DELETE CASCADE not valid;
-
-alter table "public"."expense_item_tags" validate constraint "expense_item_tags_expense_item_id_fkey";
-
-alter table "public"."expense_item_tags" add constraint "expense_item_tags_tag_id_fkey" FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE not valid;
-
-alter table "public"."expense_item_tags" validate constraint "expense_item_tags_tag_id_fkey";
-
 alter table "public"."expense_items" add constraint "expense_items_category_id_fkey" FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE RESTRICT not valid;
 
 alter table "public"."expense_items" validate constraint "expense_items_category_id_fkey";
@@ -216,8 +186,6 @@ alter table "public"."expense_items" add constraint "expense_items_daily_record_
 alter table "public"."expense_items" validate constraint "expense_items_daily_record_id_fkey";
 
 alter table "public"."positions" add constraint "positions_name_key" UNIQUE using index "positions_name_key";
-
-alter table "public"."tags" add constraint "tags_name_key" UNIQUE using index "tags_name_key";
 
 alter table "public"."travel_types" add constraint "travel_types_name_key" UNIQUE using index "travel_types_name_key";
 
@@ -464,48 +432,6 @@ grant truncate on table "public"."expense_cards" to "service_role";
 
 grant update on table "public"."expense_cards" to "service_role";
 
-grant delete on table "public"."expense_item_tags" to "anon";
-
-grant insert on table "public"."expense_item_tags" to "anon";
-
-grant references on table "public"."expense_item_tags" to "anon";
-
-grant select on table "public"."expense_item_tags" to "anon";
-
-grant trigger on table "public"."expense_item_tags" to "anon";
-
-grant truncate on table "public"."expense_item_tags" to "anon";
-
-grant update on table "public"."expense_item_tags" to "anon";
-
-grant delete on table "public"."expense_item_tags" to "authenticated";
-
-grant insert on table "public"."expense_item_tags" to "authenticated";
-
-grant references on table "public"."expense_item_tags" to "authenticated";
-
-grant select on table "public"."expense_item_tags" to "authenticated";
-
-grant trigger on table "public"."expense_item_tags" to "authenticated";
-
-grant truncate on table "public"."expense_item_tags" to "authenticated";
-
-grant update on table "public"."expense_item_tags" to "authenticated";
-
-grant delete on table "public"."expense_item_tags" to "service_role";
-
-grant insert on table "public"."expense_item_tags" to "service_role";
-
-grant references on table "public"."expense_item_tags" to "service_role";
-
-grant select on table "public"."expense_item_tags" to "service_role";
-
-grant trigger on table "public"."expense_item_tags" to "service_role";
-
-grant truncate on table "public"."expense_item_tags" to "service_role";
-
-grant update on table "public"."expense_item_tags" to "service_role";
-
 grant delete on table "public"."expense_items" to "anon";
 
 grant insert on table "public"."expense_items" to "anon";
@@ -589,48 +515,6 @@ grant trigger on table "public"."positions" to "service_role";
 grant truncate on table "public"."positions" to "service_role";
 
 grant update on table "public"."positions" to "service_role";
-
-grant delete on table "public"."tags" to "anon";
-
-grant insert on table "public"."tags" to "anon";
-
-grant references on table "public"."tags" to "anon";
-
-grant select on table "public"."tags" to "anon";
-
-grant trigger on table "public"."tags" to "anon";
-
-grant truncate on table "public"."tags" to "anon";
-
-grant update on table "public"."tags" to "anon";
-
-grant delete on table "public"."tags" to "authenticated";
-
-grant insert on table "public"."tags" to "authenticated";
-
-grant references on table "public"."tags" to "authenticated";
-
-grant select on table "public"."tags" to "authenticated";
-
-grant trigger on table "public"."tags" to "authenticated";
-
-grant truncate on table "public"."tags" to "authenticated";
-
-grant update on table "public"."tags" to "authenticated";
-
-grant delete on table "public"."tags" to "service_role";
-
-grant insert on table "public"."tags" to "service_role";
-
-grant references on table "public"."tags" to "service_role";
-
-grant select on table "public"."tags" to "service_role";
-
-grant trigger on table "public"."tags" to "service_role";
-
-grant truncate on table "public"."tags" to "service_role";
-
-grant update on table "public"."tags" to "service_role";
 
 grant delete on table "public"."travel_types" to "anon";
 
