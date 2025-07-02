@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Bell, Plus } from "lucide-react";
+import { Bell, Plus, Home } from "lucide-react";
 import { createClient } from "@/utils/supabase/server";
 import UserDropdown from "./UserDropdown";
 
@@ -28,6 +28,15 @@ export default async function SignedinHeader() {
 
           {/* Navigation */}
           <div className="flex items-center space-x-4">
+            {/* Home button */}
+            <Link
+              href="/"
+              className="flex items-center space-x-2 text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 px-3 py-2 rounded-lg transition-colors duration-200"
+            >
+              <Home className="h-4 w-4" />
+              <span className="font-medium">Home</span>
+            </Link>
+
             {/* Post button */}
             <Link
               href="/create"
