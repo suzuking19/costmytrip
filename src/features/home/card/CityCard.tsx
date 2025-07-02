@@ -57,7 +57,7 @@ export default function CityCardComponent({
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-sm transition-transform duration-200 hover:shadow-xl">
+    <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-sm h-full flex flex-col transition-transform duration-200 hover:shadow-xl">
       {/* Header section */}
       <div className="flex justify-between items-start mb-4">
         <div>
@@ -93,8 +93,8 @@ export default function CityCardComponent({
         {cityCard.contributionCount} contributions
       </p>
 
-      {/* Top post section */}
-      <div className="bg-stone-50 rounded-lg p-4 mb-6 border border-stone-200">
+      {/* Top post section - flex-grow to take available space */}
+      <div className="bg-stone-50 rounded-lg p-4 mb-6 border border-stone-200 flex-grow">
         <div className="flex items-center mb-2">
           <Trophy className="h-5 w-5 text-orange-500 mr-2" />
           <span className="text-gray-700 font-medium">Top Post by</span>
@@ -158,11 +158,11 @@ export default function CityCardComponent({
         </div>
       </div>
 
-      {/* Learn more button */}
+      {/* Learn more button - stays at bottom */}
       <button
         onClick={handleLearnMore}
         disabled={isLoading}
-        className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-indigo-700 transition duration-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-indigo-700 transition duration-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed mt-auto"
       >
         {isLoading ? (
           "Loading..."
