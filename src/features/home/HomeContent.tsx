@@ -79,7 +79,7 @@ export default function HomeContent({ cities, isSignedIn }: HomeContentProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
       >
-        <CityGrid isSignedIn={isSignedIn} />
+        <CityGrid cities={cities} isSignedIn={isSignedIn} />
       </motion.div>
     </>
   );
