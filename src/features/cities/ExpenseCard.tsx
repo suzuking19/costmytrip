@@ -47,7 +47,7 @@ export default function ExpenseCardComponent({
 
   const handleLearnMore = () => {
     // Navigate to expense card detail page
-    router.push(`/${expenseCard.cityId}/expense/${expenseCard.id}`);
+    router.push(`/${expenseCard.cityId}/${expenseCard.id}`);
   };
 
   const getInitials = (username: string) => {
