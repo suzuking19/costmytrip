@@ -4,6 +4,8 @@
 
 **URL:** [https://www.costmytrip.com](https://www.costmytrip.com)
 
+> **Note: CostMyTrip is currently under active development. Features, data, and UI are subject to change.**
+
 ## About
 
 CostMyTrip is a community-driven platform where travelers can share their actual travel expenses and browse cost information from other users. This helps future travelers plan their budgets more accurately based on real-world data.
