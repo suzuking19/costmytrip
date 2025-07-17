@@ -2,7 +2,10 @@
 
 ![CostMyTrip Banner](./public/header.png)
 
-**URL:** [https://www.costmytrip.com](https://www.costmytrip.com)
+## Preview
+
+![Preview 1](./public/gif/preview1.gif)
+![Preview 2](./public/gif/preview2.gif)
 
 > **Note: CostMyTrip is currently under active development. Features, data, and UI are subject to change.**
 
