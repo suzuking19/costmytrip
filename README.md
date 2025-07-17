@@ -4,8 +4,11 @@
 
 ## Preview
 
-![Preview 1](./public/gif/preview1.gif)
-![Preview 2](./public/gif/preview2.gif)
+<video src="./public/video/preview1.mp4" controls width="600">
+</video>
+
+<video src="./public/video/preview2.mp4" controls width="600">
+</video>
 
 > **Note: CostMyTrip is currently under active development. Features, data, and UI are subject to change.**
 
