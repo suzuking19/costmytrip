@@ -4,11 +4,19 @@
 
 ## Preview
 
+### Here is videos ↓
+
 <video src="./public/video/preview1.mp4" controls width="600">
+   The video cannot be played in your environment.
 </video>
 
+[Preview 1](/public/video/preview1.mp4)
+
 <video src="./public/video/preview2.mp4" controls width="600">
+   The video cannot be played in your environment.
 </video>
+
+[Preview 2](/public/video/preview2.mp4)
 
 > **Note: CostMyTrip is currently under active development. Features, data, and UI are subject to change.**
 
